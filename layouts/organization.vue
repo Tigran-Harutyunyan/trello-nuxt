@@ -8,9 +8,7 @@ import Sidebar from "@/components/dashboard/Sidebar.vue";
     <main class="pt-20 md:pt-24 px-4 max-w-6xl 2xl:max-w-screen-xl mx-auto">
       <div class="flex gap-x-7">
         <div class="w-64 shrink-0 hidden md:block">
-          <ClientOnly>
-            <Sidebar />
-          </ClientOnly>
+          <Sidebar />
         </div>
         <NuxtPage>
           <slot />
