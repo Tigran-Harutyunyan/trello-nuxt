@@ -7,15 +7,24 @@ export default defineEventHandler(async (event) => {
     const {
         orgId,
         title,
+        image
+    } = body;
+
+    const [
         imageId,
         imageThumbUrl,
         imageFullUrl,
-        imageUserName,
         imageLinkHTML,
-    } = body;
+        imageUserName
+    ] = image.split("|");
+
+    if (!imageId || !imageThumbUrl || !imageFullUrl || !imageUserName || !imageLinkHTML) {
+        return {
+            error: "Missing fields. Failed to create board."
+        };
+    }
 
     const { auth } = event.context;
-
 
     if (!(auth.userId && orgId)) return;
 
