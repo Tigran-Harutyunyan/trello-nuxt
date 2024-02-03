@@ -1,51 +1,47 @@
-import { useClerkProvide } from 'vue-clerk'
+import { useClerkProvide } from 'vue-clerk';
+import { toast } from 'vue-sonner';
+
 interface Iboard {
     id: string;
     title: string;
     imageId: string;
-    imageThumbUrl: string;
-    imageFullUrl: string;
-    imageUserName: string;
-    imageLinkHTML: string;
+    image: string
 }
 
-export const useCreateBoard = (params: Omit<Iboard, 'id'>) => {
+type payload = Omit<Iboard, 'id'>;
+
+export const useCreateBoard = () => {
     const { state } = useClerkProvide();
 
-    const { title, imageId, imageThumbUrl, imageFullUrl, imageUserName, imageLinkHTML } = params;
-
-    if (!imageId || !imageThumbUrl || !imageFullUrl || !imageUserName || !imageLinkHTML) {
-        return {
-            error: "Missing fields. Failed to create board."
-        };
-    }
+    const fieldErrors = ref()
 
     const isBoardCreating = ref(false);
 
+    const router = useRouter();
+
     const board = ref<Iboard>();
 
-    const createBoard = async () => {
-
+    const createBoard = async (params: payload) => {
         isBoardCreating.value = true;
+
         try {
             const response = await $fetch(`/api/board?`, {
                 method: "post",
                 body: {
                     orgId: state.organization?.id,
-                    title,
-                    imageId,
-                    imageThumbUrl,
-                    imageFullUrl,
-                    imageUserName,
-                    imageLinkHTML,
+                    ...params
                 },
             });
 
             if (response.id) {
                 board.value = response as Iboard;
+                toast.success("Board created!");
+                router.push(`/board/${response.id}`);
             }
-        } catch (e) {
 
+            // show modal with PRO feature upgrade if it has errors
+        } catch (e) {
+            fieldErrors.value = e.message
         } finally {
             isBoardCreating.value = false
         }
@@ -53,6 +49,7 @@ export const useCreateBoard = (params: Omit<Iboard, 'id'>) => {
     return {
         createBoard,
         isBoardCreating,
-        board
+        board,
+        fieldErrors
     }
 }

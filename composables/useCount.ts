@@ -1,5 +1,3 @@
-
-
 import { useClerkProvide } from 'vue-clerk'
 
 export const useCount = () => {
@@ -7,6 +5,8 @@ export const useCount = () => {
     const isLoadingCount = ref(false);
 
     const availableCount = ref();
+
+    const canCreate = ref()
 
     const getAvailableCount = async () => {
 
@@ -67,11 +67,13 @@ export const useCount = () => {
         isLoadingCount.value = true;
         try {
             const response = await $fetch(
-                `/api/count/incrementAvailableCount?orgId=${state.organization?.id}`,
+                `/api/count/hasAvailableCount?orgId=${state.organization?.id}`,
                 {
                     method: "get",
                 }
             );
+
+            if (typeof response === "boolean") { canCreate.value = response; }
 
 
         } catch (e) {
@@ -83,7 +85,9 @@ export const useCount = () => {
 
     return {
         getAvailableCount,
+        hasAvailableCount,
         isLoadingCount,
-        availableCount
+        availableCount,
+        canCreate
     }
 }
