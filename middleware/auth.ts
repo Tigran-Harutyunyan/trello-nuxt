@@ -20,16 +20,16 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
             let path = "/select-org";
 
-            if (orgId) {
-                path = `/organization/${orgId}`
-            }
+            // if (orgId) {
+            //     path = `/organization/${orgId}`
+            // }
 
             return navigateTo(path);
         }
 
         if (!userId) {
             console.log('case 2', to.path)
-            //return navigateTo('/') 
+
             return navigateTo(to.path === '/' ? '/' : '/sign-in');
         }
 
