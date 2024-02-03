@@ -97,3 +97,7 @@ body, html {
 body > div:first-of-type {
   height: 100%;
 }
+
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
