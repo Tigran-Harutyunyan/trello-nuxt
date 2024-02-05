@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: "auth", middleware: "auth" });
 
-import { OrganizationSwitcher } from "vue-clerk";
+import { OrganizationList } from "vue-clerk";
 
 const appearance = {
   elements: {
@@ -25,7 +25,7 @@ const appearance = {
 
 <template>
   <div class="grid h-full place-items-center">
-    <OrganizationSwitcher
+    <OrganizationList
       hidePersonal
       :appearance="appearance"
       :afterCreateOrganizationUrl="(org) => `/organization/${org.id}`"
