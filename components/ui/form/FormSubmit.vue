@@ -25,7 +25,7 @@ const {
   <Button
     :disabled="disabled"
     type="submit"
-    variant="primary"
+    :variant="variant"
     size="sm"
     :class="className"
   >

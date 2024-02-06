@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import FormErrors from "./FormErrors.vue";
@@ -25,7 +26,28 @@ const {
   defaultValue,
 } = defineProps<FormTextareaProps>();
 
-const emit = defineEmits(["onKeyDown", "onBlur", "onClick"]);
+const emit = defineEmits(["onKeyDown", "onBlur", "onClick", "change"]);
+
+const inputRef = ref();
+
+const onChange = (e: InputEvent) => {
+  const val = (e.target as HTMLInputElement).value;
+  if (typeof val === "string") {
+    emit("change", val);
+  }
+};
+
+const focus = () => {
+  if (inputRef.value) inputRef.value?.focus();
+};
+const select = () => {
+  if (inputRef.value) inputRef.value?.select();
+};
+
+defineExpose({
+  focus,
+  select,
+});
 </script>
 
 <template>
@@ -40,17 +62,22 @@ const emit = defineEmits(["onKeyDown", "onBlur", "onClick"]);
       </Label>
 
       <Textarea
-        @onKeyDown="(e) => emit('onKeyDown', e)"
-        @onBlur="(e) => emit('onBlur', e)"
-        @onClick="(e) => emit('onClick', e)"
-        :ref="ref"
+        @input="onChange"
+        @keyDown="(e) => emit('onKeyDown', e)"
+        @blur="emit('onBlur')"
+        @click="(e) => emit('onClick', e)"
+        ref="inputRef"
         :required="required"
         :placeholder="placeholder"
         :name="id"
         :id="id"
         :disabled="disabled"
-        :class="className"
-        class="resize-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 focus:ring-0 outline-none shadow-sm"
+        :class="
+          cn(
+            'resize-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 focus:ring-0 outline-none shadow-sm',
+            className
+          )
+        "
         aria-describedby="`${id}-error`"
         :defaultValue="defaultValue"
       />

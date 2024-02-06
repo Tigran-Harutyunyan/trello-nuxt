@@ -143,7 +143,11 @@ const onImgSelect = (payload: IImage) => {
             :errors="errors"
             @onBlur="(data) => (form.title = data)"
           />
-          <FormSubmit className="w-full" :disabled="isBoardCreating">
+          <FormSubmit
+            className="w-full"
+            variant="primary"
+            :disabled="isBoardCreating"
+          >
             Create
           </FormSubmit>
         </div>
