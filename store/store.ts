@@ -1,14 +1,20 @@
 import { defineStore } from "pinia";
 
 export const useMainStore = defineStore("main", () => {
-  const activeOragnization = ref(null);
+  const isSidebarOpen = ref(false);
 
-  const setOrganization = (data) => {
-    activeOragnization.value = data;
+  const onOpenSidebar = () => {
+    isSidebarOpen.value = true;
   }
 
+  const onCloseSidebar = () => {
+    isSidebarOpen.value = false;
+  }
+
+
   return {
-    activeOragnization,
-    setOrganization,
+    isSidebarOpen,
+    onOpenSidebar,
+    onCloseSidebar,
   };
 });
