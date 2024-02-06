@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useClerk, useClerkProvide } from "vue-clerk";
 import { User2, HelpCircle } from "lucide-vue-next";
 import BoardListSkeleton from "@/components/dashboard/organizations/BoardListSkeleton.vue";
 import { useBoards } from "@/composables/useBords";
@@ -8,25 +9,48 @@ import Hint from "@/components/Hint.vue";
 import FormPopover from "@/components/ui/form/FormPopover.vue";
 import { MAX_FREE_BOARDS } from "@/constants/boards";
 
-interface Iboard {
-  id: string;
-  title: string;
-  imageId: string;
-  imageThumbUrl: string;
-  imageFullUrl: string;
-  imageUserName: string;
-  imageLinkHTML: string;
-}
+const { derivedState } = useClerkProvide();
+
+const { setActive, getOrganizationMemberships } = useClerk();
+
+const userMemberships = await getOrganizationMemberships();
+
+const route = useRoute();
 
 const { isLoadingBoards, boards, getBoards } = useBoards();
 const { checkSubscription, isPro } = useSubscription();
 const { getAvailableCount, availableCount } = useCount();
 
+const getData = (orgId: string) => {
+  getBoards(orgId);
+  getAvailableCount(orgId);
+};
+
 onMounted(async () => {
-  getBoards();
-  getAvailableCount();
   checkSubscription();
 });
+
+watch(
+  () => route,
+  async () => {
+    const paramsOrgId = route.params?.organizationId;
+
+    const isValidOrgId = userMemberships.some(
+      (mem) => mem.organization.id === paramsOrgId
+    );
+
+    if (isValidOrgId && derivedState.value?.orgId !== paramsOrgId) {
+      setActive({
+        organization: paramsOrgId as string,
+      });
+    }
+
+    getData(paramsOrgId as string);
+  },
+  {
+    immediate: true,
+  }
+);
 </script>
 
 <template>
