@@ -3,16 +3,23 @@ import { Medal } from "lucide-vue-next";
 import Footer from "@/components/marketing/Footer.vue";
 import Navbar from "@/components/marketing/Navbar.vue";
 
+import { useClerkProvide } from "vue-clerk";
+const { derivedState } = useClerkProvide();
+
 definePageMeta({
   isPublicRoute: true,
   //isMarketingRoute: true,
   middleware: "auth",
 });
+
+const isAuth = computed(() => {
+  return !!derivedState.value?.userId;
+});
 </script>
 
 <template>
   <div class="h-screen bg-slate-100">
-    <Navbar />
+    <Navbar :isAuth="isAuth" />
     <main class="pt-40 pb-20 bg-slate-100">
       <div class="flex items-center justify-center flex-col">
         <div class="flex items-center justify-center flex-col font-local">
@@ -39,7 +46,7 @@ definePageMeta({
           high rises to the home office, the way your team works is unique -
           accomplish it all with Taskify.
         </div>
-        <Button class="mt-6" size="lg" as-child>
+        <Button class="mt-6" size="lg" as-child v-if="!isAuth">
           <NuxtLink to="/sign-up"> Get Taskify for free </NuxtLink>
         </Button>
       </div>

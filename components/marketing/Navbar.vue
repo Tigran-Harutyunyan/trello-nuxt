@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import Logo from "@/components/Logo.vue";
 import { Button } from "@/components/ui/button";
+
+const { isAuth } = defineProps<{
+  isAuth: boolean;
+}>();
 </script>
 
 <template>
@@ -13,6 +17,7 @@ import { Button } from "@/components/ui/button";
       <Logo />
       <div
         class="space-x-4 md:block md:w-auto flex items-center justify-between w-full"
+        v-if="!isAuth"
       >
         <Button size="sm" variant="outline" as-child>
           <NuxtLink to="/sign-in"> Login </NuxtLink>
