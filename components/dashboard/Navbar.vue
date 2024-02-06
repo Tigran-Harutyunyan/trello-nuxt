@@ -5,6 +5,8 @@ import { Plus } from "lucide-vue-next";
 import Logo from "@/components/Logo.vue";
 import FormPopover from "@/components/ui/form/FormPopover.vue";
 import { useClerkProvide } from "vue-clerk";
+import MobileSidebar from "./MobileSidebar.vue";
+
 const { state } = useClerkProvide();
 const switcherAppearance = {
   elements: {
@@ -33,7 +35,10 @@ const route = useRoute();
   <nav
     class="fixed z-50 top-0 px-4 w-full h-14 border-b shadow-sm bg-white flex items-center"
   >
-    <!-- <MobileSidebar /> -->
+    <ClientOnly>
+      <MobileSidebar />
+    </ClientOnly>
+
     <div class="flex items-center gap-x-4">
       <div class="hidden md:flex">
         <Logo />
@@ -47,6 +52,7 @@ const route = useRoute();
           Create
         </Button>
       </FormPopover>
+
       <FormPopover>
         <Button variant="primary" size="sm" class="rounded-sm block md:hidden">
           <Plus class="h-4 w-4" />
@@ -60,7 +66,7 @@ const route = useRoute();
         @click="router.push(`/organization/${state.organization?.id}`)"
         v-if="route.name === 'board-id'"
       >
-        All boards
+        Boards
       </Button>
     </div>
     <div class="ml-auto flex items-center gap-x-2">
