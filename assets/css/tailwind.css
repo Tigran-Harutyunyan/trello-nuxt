@@ -101,3 +101,21 @@ body > div:first-of-type {
 .aspect-video {
   aspect-ratio: 16 / 9;
 }
+
+
+.grabbable:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.smooth-dnd-container {
+  min-height: 12px !important;
+}
