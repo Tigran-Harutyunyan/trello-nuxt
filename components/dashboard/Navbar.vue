@@ -3,7 +3,9 @@ import { OrganizationSwitcher, UserButton } from "vue-clerk";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-vue-next";
 import Logo from "@/components/Logo.vue";
-
+import FormPopover from "@/components/ui/form/FormPopover.vue";
+import { useClerkProvide } from "vue-clerk";
+const { state } = useClerkProvide();
 const switcherAppearance = {
   elements: {
     rootBox: {
@@ -22,6 +24,9 @@ const buttonAppearance = {
     },
   },
 };
+
+const router = useRouter();
+const route = useRoute();
 </script>
 
 <template>
@@ -33,20 +38,30 @@ const buttonAppearance = {
       <div class="hidden md:flex">
         <Logo />
       </div>
-      <!-- <FormPopover align="start" side="bottom" sideOffset="{18}"> -->
+      <FormPopover align="start" side="bottom" :sideOffset="18">
+        <Button
+          size="sm"
+          variant="primary"
+          class="rounded-sm hidden md:block h-auto py-1.5 px-2"
+        >
+          Create
+        </Button>
+      </FormPopover>
+      <FormPopover>
+        <Button variant="primary" size="sm" class="rounded-sm block md:hidden">
+          <Plus class="h-4 w-4" />
+        </Button>
+      </FormPopover>
+
       <Button
         size="sm"
         variant="primary"
         class="rounded-sm hidden md:block h-auto py-1.5 px-2"
+        @click="router.push(`/organization/${state.organization?.id}`)"
+        v-if="route.name === 'board-id'"
       >
-        Create
+        All boards
       </Button>
-      <!-- </FormPopover> -->
-      <!-- <FormPopover> -->
-      <Button variant="primary" size="sm" class="rounded-sm block md:hidden">
-        <Plus class="h-4 w-4" />
-      </Button>
-      <!-- </FormPopover> -->
     </div>
     <div class="ml-auto flex items-center gap-x-2">
       <OrganizationSwitcher
