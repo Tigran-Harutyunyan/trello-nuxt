@@ -26,9 +26,11 @@
     "@vee-validate/zod": "^4.12.5",
     "@vueuse/core": "^10.7.2",
     "class-variance-authority": "^0.7.0",
+    "click-outside-vue3": "^4.0.1",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
     "h3-clerk": "^0.3.8",
+    "i": "^0.3.7",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lucide-vue-next": "^0.319.0",
@@ -40,8 +42,10 @@
     "tailwindcss-animate": "^1.0.7",
     "unsplash-js": "^7.0.19",
     "vee-validate": "^4.12.5",
-    "vue-clerk": "^0.1.5",
+    "vue-clerk": "^0.1.6",
+    "vue-draggable-next": "^2.2.1",
     "vue-sonner": "^1.0.3",
+    "vue3-smooth-dnd": "^0.0.6",
     "zod": "^3.22.4"
   }
 }
