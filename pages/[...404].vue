@@ -1,3 +1,7 @@
+<script setup>
+import { Button } from "~/components/ui/button";
+</script>
+
 <template>
   <div class="mx-auto w-full flex items-center justify-center px-2 h-screen">
     <div class="flex flex-col items-center my-auto">
@@ -6,8 +10,8 @@
       <p class="my-4 text-center font-bold">
         Ooops! We can't seem to find the page you're looking for.
       </p>
-      <NuxtLink to="/" class="w-full mt-2">
-        <Button label="BACK TO HOMEPAGE"></Button>
+      <NuxtLink to="/" class="mt-2 mx-auto">
+        <Button variant="primary">BACK TO HOMEPAGE</Button>
       </NuxtLink>
     </div>
   </div>
