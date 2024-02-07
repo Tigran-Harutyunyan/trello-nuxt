@@ -51,10 +51,6 @@ const routes = ref([
     href: `/organization/${organization.id}/billing`,
   },
 ]);
-
-const onClick = (href: string) => {
-  router.push(href);
-};
 </script>
 
 <template>
@@ -83,7 +79,7 @@ const onClick = (href: string) => {
         v-for="route in routes"
         :key="route.href"
         size="sm"
-        @click="onClick(route.href)"
+        @click.stop="router.push(route.href)"
         class="w-full font-normal justify-start pl-10 mb-1"
         :class="{ 'bg-sky-500/10 text-sky-700': routepath === route.href }"
         variant="ghost"
