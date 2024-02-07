@@ -5,12 +5,18 @@ import type { IdropResult } from "@/types";
 import ListForm from "./ListForm.vue";
 import ListItem from "./ListItem.vue";
 import { useBoard } from "@/composables/useBoard";
+import { useList } from "@/composables/useList";
+import { useCard } from "@/composables/useCard";
 
 interface ListContainerProps {
   data: ListWithCards[];
 }
 
 const { getBoard, list } = useBoard();
+
+const { updateOrderList } = useList();
+
+const { updateCardOrder } = useCard();
 
 const { data } = defineProps<ListContainerProps>();
 
@@ -28,19 +34,32 @@ provide("board", {
   updateBoard,
 });
 
+// User moves a list
 const onDrop = (dropResult: IdropResult) => {
   const { addedIndex, removedIndex } = dropResult;
 
   if (addedIndex === removedIndex) {
     return;
   }
+
   orderedData.value = applyDrag(orderedData.value, dropResult);
+
+  updateOrderList({
+    boardId: useRoute().params.id,
+    items: orderedData.value.map((item, index) => {
+      return {
+        ...item,
+        order: index,
+      };
+    }),
+  });
 };
 
 const getParentPayload = (index: number) => {
   return orderedData.value[index];
 };
 
+// user moves between columns
 const onDropToSibling = ({
   dropResult,
   dropIndex,
@@ -51,13 +70,24 @@ const onDropToSibling = ({
   const { addedIndex, payload } = dropResult;
 
   if (addedIndex !== null) {
-    // add to column
     if (orderedData.value[dropIndex].cards) {
+      // Assign the new listId to the moved card
+
+      payload.listId = orderedData.value[dropIndex].id;
+
+      // Add card to the destination list
       orderedData.value[dropIndex].cards.splice(addedIndex, 0, payload);
+
+      // Update the order for each card in the destination list
+      orderedData.value[dropIndex].cards.forEach((card, idx: number) => {
+        card.order = idx;
+      });
+      updateCardOrder(orderedData.value[dropIndex].cards);
     }
   }
 };
 
+// User rearranges cards in a list
 const onColumnRearrange = ({
   columnIndex,
   dropResult,
@@ -66,7 +96,19 @@ const onColumnRearrange = ({
   dropResult: IdropResult;
 }) => {
   const cards = orderedData.value[columnIndex].cards;
-  orderedData.value[columnIndex].cards = applyDrag(cards, dropResult);
+
+  let reorderedCards = applyDrag(cards, dropResult);
+
+  // Update the order for each card source list
+  reorderedCards.forEach((card, idx: number) => {
+    card.order = idx;
+  });
+
+  orderedData.value[columnIndex].cards = reorderedCards;
+
+  if (dropResult.addedIndex !== null) {
+    updateCardOrder(reorderedCards);
+  }
 };
 
 const applyDrag = (arr: any, dropResult: IdropResult) => {
