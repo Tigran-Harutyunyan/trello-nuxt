@@ -15,11 +15,11 @@ export const useBoards = () => {
     }
     const boards = ref<Iboard[]>();
 
-    const getBoards = async () => {
+    const getBoards = async (orgId: string) => {
 
         isLoadingBoards.value = true;
         try {
-            const response = await $fetch(`/api/boards?orgId=${state.organization?.id}`, {
+            const response = await $fetch(`/api/boards?orgId=${orgId}`, {
                 method: "get",
             });
 
@@ -32,6 +32,7 @@ export const useBoards = () => {
             isLoadingBoards.value = false
         }
     }
+
     return {
         getBoards,
         isLoadingBoards,

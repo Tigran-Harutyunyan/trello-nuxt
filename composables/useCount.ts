@@ -8,12 +8,12 @@ export const useCount = () => {
 
     const canCreate = ref()
 
-    const getAvailableCount = async () => {
+    const getAvailableCount = async (orgId: string) => {
 
         isLoadingCount.value = true;
         try {
             const response = await $fetch(
-                `/api/count/availablecount?orgId=${state.organization?.id}`,
+                `/api/count/availablecount?orgId=${orgId}`,
                 {
                     method: "get",
                 }
