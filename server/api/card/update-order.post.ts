@@ -42,10 +42,9 @@ export default defineEventHandler(async (event) => {
         return updatedCards
 
     } catch (error: any) {
-        throw createError({
-            statusCode: 500,
-            statusMessage: error
-        });
+        return {
+            error: "Failed to reorder."
+        }
     }
 
 });
