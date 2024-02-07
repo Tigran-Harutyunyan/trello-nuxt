@@ -14,6 +14,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
         const userId = auth?.userId;
         const orgId = auth?.orgId;
 
+        console.log(userId);
 
         if (to.path === '/') {
             console.log('case 1', userId);
@@ -24,18 +25,18 @@ export default defineNuxtRouteMiddleware((to, from) => {
             //     path = `/organization/${orgId}`
             // }
 
-            return navigateTo(path);
+            // return navigateTo(path);
         }
 
         if (!userId) {
             console.log('case 2', to.path)
 
-            return navigateTo(to.path === '/' ? '/' : '/sign-in');
+            // return navigateTo(to.path === '/' ? '/' : '/sign-in');
         }
 
         if (userId && !orgId && to.path !== "/select-org") {
-            console.log('case 3')
-            return navigateTo('/select-org')
+            // console.log('case 3')
+            // return navigateTo('/select-org')
         }
 
     }
@@ -45,24 +46,24 @@ export default defineNuxtRouteMiddleware((to, from) => {
     // and redirect to / sign-in. 
 
     if (process.client && clerk.loaded) {
+
         if (!clerk.user?.id) {
             console.log('---- client 1 -----')
-            return navigateTo('/');
+            // return navigateTo('/');
         }
+        //"organization-organizationId"
 
         if (clerk.user?.id) {
             const orgId = clerk?.organization?.id;
             console.log('---- client 2 -----')
             let path = "/select-org";
 
-            console.log(from, to)
+            console.log(from)
 
-            if (orgId && (!from.params?.organizationId)) {
-                path = `/organization/${orgId}`;
-                return navigateTo(path);
-            }
-
-
+            // if (orgId && (!from.params?.organizationId)) {
+            //     path = `/organization/${orgId}`;
+            //     return navigateTo(path);
+            // }
         }
     }
 
