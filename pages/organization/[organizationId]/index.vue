@@ -2,6 +2,7 @@
 import BoardList from "@/components/dashboard/organizations/BoardList.vue";
 import Info from "@/components/dashboard/organizations/Info.vue";
 import { Separator } from "@/components/ui/separator";
+
 definePageMeta({
   layout: "organization",
   middleware: "auth",
