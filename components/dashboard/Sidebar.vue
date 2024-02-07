@@ -7,11 +7,16 @@ import NavItemSkeleton from "./NavItemSkeleton.vue";
 import NavItem from "./NavItem.vue";
 import { useClerkProvide, useClerk } from "vue-clerk";
 
+interface SidebarProps {
+  storageKey?: string;
+}
+
+const { storageKey = "t-sidebar-state" } = defineProps<SidebarProps>();
+
 const { derivedState, isClerkLoaded } = useClerkProvide();
 const { getOrganizationMemberships } = useClerk();
 const userMemberships = await getOrganizationMemberships();
 
-const STORAGE_KEY = "t-sidebar-state";
 type storage = {
   [x: string]: boolean;
 };
@@ -33,14 +38,14 @@ const onExpand = (orgId: string) => {
     parsedExpanded[orgId] = true;
   }
   if (process.client) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedExpanded));
+    localStorage.setItem(storageKey, JSON.stringify(parsedExpanded));
   }
 };
 
 onMounted(() => {
   if (process.client && localStorage) {
-    const data = localStorage.getItem(STORAGE_KEY);
-    parsedExpanded = JSON.parse(data);
+    const data = localStorage.getItem(storageKey);
+    parsedExpanded = data !== null ? JSON.parse(data) : {};
   }
 });
 </script>
