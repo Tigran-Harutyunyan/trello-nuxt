@@ -25,6 +25,10 @@ export default defineEventHandler(async (event) => {
 
     let board;
 
+    if (!isPro) {
+        await decreaseAvailableCount(orgId);
+    }
+
     try {
 
         board = await prisma.board.delete({

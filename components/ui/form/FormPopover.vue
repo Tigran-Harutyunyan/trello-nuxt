@@ -18,6 +18,8 @@ import {
 
 import { type IImage } from "@/types";
 
+const isLoading = ref(false);
+
 const { createBoard, isBoardCreating } = useCreateBoard();
 
 const CreateBoardScheme = z.object({
@@ -74,12 +76,16 @@ const onSubmit = async () => {
     return;
   }
 
+  isLoading.value = true;
+
   const payload: Ipayload = {
     ...form,
     image: imageValues.value,
   };
 
   await createBoard(payload);
+
+  isLoading.value = false;
   closeRef.value!.click();
 };
 
@@ -128,7 +134,7 @@ const onImgSelect = (payload: IImage & { value: string }) => {
             variant="primary"
             :disabled="isBoardCreating"
           >
-            Create
+            {{ isLoading ? "Creating..." : "Create" }}
           </FormSubmit>
         </div>
       </form>
