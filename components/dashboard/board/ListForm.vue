@@ -7,7 +7,7 @@ import { Plus, X } from "lucide-vue-next";
 import { onClickOutside } from "@vueuse/core";
 import { useList } from "@/composables/useList";
 
-const { updateBoard } = inject("board");
+const { onCreateList } = inject("board");
 
 const { createList, isCreatingList } = useList();
 
@@ -43,14 +43,16 @@ const onSubmit = async () => {
   }
 
   // Update DB.
-  await createList({
+  const res = await createList({
     title: title.value,
     boardId: route.params.id as string,
   });
 
   title.value = "";
   disableEditing();
-  updateBoard(true);
+  if (res?.id) {
+    onCreateList(res);
+  }
 };
 
 const onChange = (text: string) => {
@@ -87,8 +89,8 @@ const onBlur = () => {
         placeholder="Enter list title..."
       />
       <div class="flex items-center gap-x-1">
-        <FormSubmit>
-          {{ isCreatingList ? "Adding to list" : "Add list" }}
+        <FormSubmit variant="primary">
+          {{ isCreatingList ? "Adding..." : "Add list" }}
         </FormSubmit>
         <Button @click="isEditing = false" size="sm" variant="ghost">
           <X class="h-5 w-5" />
