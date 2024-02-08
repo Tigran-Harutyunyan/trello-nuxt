@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { Loader2, Check } from "lucide-vue-next";
-import { unsplash } from "@/lib/unsplash";
+
 import { defaultImages } from "@/constants/images";
 import FormErrors from "./FormErrors.vue";
 import { type IImage } from "@/types";
 const emit = defineEmits(["select"]);
+
+const { unsplash } = useNuxtApp();
 
 interface FormPickerProps {
   id: string;

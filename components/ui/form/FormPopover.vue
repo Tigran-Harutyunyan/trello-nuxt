@@ -106,7 +106,7 @@ const onImgSelect = (payload: IImage & { value: string }) => {
 
       <PopoverClose :ref="closeRef" as-child>
         <Button
-          class="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
+          class="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600 close-btn"
           variant="ghost"
         >
           <X class="h-4 w-4" />
@@ -135,3 +135,8 @@ const onImgSelect = (payload: IImage & { value: string }) => {
     </PopoverContent>
   </Popover>
 </template>
+<style scoped>
+.close-btn {
+  box-shadow: none !important;
+}
+</style>

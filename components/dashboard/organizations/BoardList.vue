@@ -77,29 +77,30 @@ watch(
           </p>
         </NuxtLink>
       </template>
-
-      <FormPopover :sideOffset="10" side="right">
-        <div
-          role="button"
-          class="aspect-video relative h-full w-full bg-muted rounded-sm flex flex-col gap-y-1 items-center justify-center hover:opacity-75 transition"
-        >
-          <p class="text-sm">Create new board</p>
-          <span class="text-xs">
-            {{
-              isPro
-                ? "Unlimited"
-                : `${MAX_FREE_BOARDS - availableCount} remaining`
-            }}
-          </span>
-          <Hint
-            :sideOffset="40"
-            side="bottom"
-            description=" Free Workspaces can have up to 5 open boards. For unlimited boards upgrade this workspace."
+      <ClientOnly>
+        <FormPopover :sideOffset="10" side="right">
+          <div
+            role="button"
+            class="aspect-video relative h-full w-full bg-muted rounded-sm flex flex-col gap-y-1 items-center justify-center hover:opacity-75 transition"
           >
-            <HelpCircle class="absolute bottom-2 right-2 h-[14px] w-[14px]" />
-          </Hint>
-        </div>
-      </FormPopover>
+            <p class="text-sm">Create new board</p>
+            <span class="text-xs">
+              {{
+                isPro
+                  ? "Unlimited"
+                  : `${MAX_FREE_BOARDS - availableCount} remaining`
+              }}
+            </span>
+            <Hint
+              :sideOffset="40"
+              side="bottom"
+              description=" Free Workspaces can have up to 5 open boards. For unlimited boards upgrade this workspace."
+            >
+              <HelpCircle class="absolute bottom-2 right-2 h-[14px] w-[14px]" />
+            </Hint>
+          </div>
+        </FormPopover>
+      </ClientOnly>
     </div>
   </div>
 </template>
