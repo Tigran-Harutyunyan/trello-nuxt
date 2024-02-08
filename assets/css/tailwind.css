@@ -119,3 +119,7 @@ body > div:first-of-type {
 .smooth-dnd-container {
   min-height: 12px !important;
 }
+
+.activity-list {
+  height: calc(100vh - 257px);
+}
