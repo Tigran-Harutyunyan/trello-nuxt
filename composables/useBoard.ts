@@ -23,6 +23,7 @@ export const useBoard = () => {
     const getBoard = async (isList: boolean) => {
 
         isLoadingBoard.value = true;
+
         let url = `/api/board?boardId=${route.params.id}&orgId=${state.organization?.id}`;
 
         if (isList) {
@@ -67,11 +68,28 @@ export const useBoard = () => {
 
     }
 
+    const updateBoard = async (title: string, id: string) => {
+        try {
+            return await $fetch(`/api/board/update?`, {
+                method: "post",
+                body: {
+                    orgId: state.organization?.id,
+                    title,
+                    id
+                },
+            });
+
+        } catch (error) {
+            return error;
+        }
+    }
+
     return {
         getBoard,
         deleteBoard,
         isLoadingBoard,
         board,
-        list
+        list,
+        updateBoard
     }
 }
