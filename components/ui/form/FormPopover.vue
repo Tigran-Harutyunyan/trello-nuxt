@@ -1,15 +1,13 @@
 <script setup lang="ts">
+import { z } from "zod";
 import { X } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import { PopoverClose } from "radix-vue";
-import { z } from "zod";
 import FormInput from "./FormInput.vue";
 import FormPicker from "./FormPicker.vue";
 import FormSubmit from "./FormSubmit.vue";
 
 import useValidation from "@/composables/useValidation";
-import { useSubscription } from "@/composables/useSubscription";
-import { useCount } from "@/composables/useCount";
 import { useCreateBoard } from "@/composables/useCreateBoard";
 
 import {
@@ -20,8 +18,6 @@ import {
 
 import { type IImage } from "@/types";
 
-const { checkSubscription, isPro } = useSubscription();
-const { hasAvailableCount, canCreate } = useCount();
 const { createBoard, isBoardCreating } = useCreateBoard();
 
 const CreateBoardScheme = z.object({
@@ -39,18 +35,15 @@ const CreateBoardScheme = z.object({
   }),
 });
 
-const form = {
+const form: {
+  title: null | string;
+  imageId: null | string;
+} = {
   title: null,
   imageId: null,
 };
 
-const { validate, errors, isValid, getError, scrolltoError } = useValidation(
-  CreateBoardScheme,
-  form,
-  {
-    mode: "lazy",
-  }
-);
+const { validate, errors, isValid } = useValidation(CreateBoardScheme, form);
 
 interface Ipayload {
   title: string;
@@ -75,20 +68,10 @@ const closeRef = ref();
 const imageValues = ref("");
 
 const onSubmit = async () => {
-  validate();
+  await validate();
 
   if (!isValid) {
     return;
-  }
-
-  await hasAvailableCount();
-  await checkSubscription();
-
-  if (!canCreate.value && !isPro.value) {
-    return {
-      error:
-        "You have reached your limit of free boards. Please upgrade to create more.",
-    };
   }
 
   const payload: Ipayload = {
@@ -97,13 +80,10 @@ const onSubmit = async () => {
   };
 
   await createBoard(payload);
-
-  // form.title = null;
-  // form.imageId = null;
   closeRef.value!.click();
 };
 
-const onImgSelect = (payload: IImage) => {
+const onImgSelect = (payload: IImage & { value: string }) => {
   form.imageId = payload.id;
   imageValues.value = payload.value;
 };
@@ -141,7 +121,7 @@ const onImgSelect = (payload: IImage) => {
             label="Board title"
             type="text"
             :errors="errors"
-            @onBlur="(data) => (form.title = data)"
+            @change="(data) => (form.title = data)"
           />
           <FormSubmit
             className="w-full"
