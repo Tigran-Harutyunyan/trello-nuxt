@@ -2,12 +2,24 @@
 import { useClerk, useClerkProvide } from "vue-clerk";
 import { User2, HelpCircle } from "lucide-vue-next";
 import BoardListSkeleton from "@/components/dashboard/organizations/BoardListSkeleton.vue";
-import { useBoards } from "@/composables/useBords";
-import { useSubscription } from "@/composables/useSubscription";
-import { useCount } from "@/composables/useCount";
 import Hint from "@/components/Hint.vue";
 import FormPopover from "@/components/ui/form/FormPopover.vue";
+
+import { useBoard } from "@/composables/useBoard";
+import { useSubscription } from "@/composables/useSubscription";
+import { useCount } from "@/composables/useCount";
+
 import { MAX_FREE_BOARDS } from "@/constants/boards";
+
+interface Iboard {
+  id: string;
+  title: string;
+  imageId: string;
+  imageThumbUrl: string;
+  imageFullUrl: string;
+  imageUserName: string;
+  imageLinkHTML: string;
+}
 
 const { derivedState } = useClerkProvide();
 
@@ -17,16 +29,27 @@ const userMemberships = await getOrganizationMemberships();
 
 const route = useRoute();
 
-const { isLoadingBoards, boards, getBoards } = useBoards();
+const isLoadingBoards = ref(false);
+
+const boards = ref<Iboard[]>();
+
+const { getBoards } = useBoard();
 const { checkSubscription, isPro } = useSubscription();
 const { getAvailableCount, availableCount } = useCount();
 
-const getData = (orgId: string) => {
-  getBoards(orgId);
-  getAvailableCount(orgId);
+const getData = async (orgId) => {
+  isLoadingBoards.value = true;
+
+  const response = await getBoards(orgId);
+
+  if (Array.isArray(response)) {
+    boards.value = response as Iboard[];
+  }
+
+  isLoadingBoards.value = false;
 };
 
-onMounted(async () => {
+onMounted(() => {
   checkSubscription();
 });
 
@@ -45,7 +68,8 @@ watch(
       });
     }
 
-    getData(paramsOrgId as string);
+    getData(paramsOrgId);
+    getAvailableCount(paramsOrgId);
   },
   {
     immediate: true,

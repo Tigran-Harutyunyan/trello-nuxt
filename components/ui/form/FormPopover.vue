@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { z } from "zod";
 import { X } from "lucide-vue-next";
+import { toast } from "vue-sonner";
+
 import { Button } from "@/components/ui/button";
 import { PopoverClose } from "radix-vue";
 import FormInput from "./FormInput.vue";
@@ -8,7 +10,7 @@ import FormPicker from "./FormPicker.vue";
 import FormSubmit from "./FormSubmit.vue";
 
 import useValidation from "@/composables/useValidation";
-import { useCreateBoard } from "@/composables/useCreateBoard";
+import { useBoard } from "@/composables/useBoard";
 
 import {
   Popover,
@@ -20,7 +22,11 @@ import { type IImage } from "@/types";
 
 const isLoading = ref(false);
 
-const { createBoard, isBoardCreating } = useCreateBoard();
+const board = ref<Iboard>();
+
+const router = useRouter();
+
+const { createBoard } = useBoard();
 
 const CreateBoardScheme = z.object({
   title: z
@@ -59,6 +65,15 @@ interface FormPopoverProps {
   sideOffset?: number;
 }
 
+interface Iboard {
+  id: string;
+  title: string;
+  imageId: string;
+  image: string;
+}
+
+type payload = Omit<Iboard, "id">;
+
 const {
   side = "bottom",
   align,
@@ -83,7 +98,31 @@ const onSubmit = async () => {
     image: imageValues.value,
   };
 
-  await createBoard(payload);
+  let response = await createBoard(payload);
+
+  if (response && typeof response === "object") {
+    if ("id" in response) {
+      board.value = response as Iboard;
+      toast.success("Board created!");
+      router.push(`/board/${response.id}`);
+    }
+
+    if ("error" in response) {
+      interface boardError {
+        error: string;
+        local?: boolean;
+        upgrade?: boolean;
+      }
+
+      const errorResp = response as boardError;
+
+      toast.error(errorResp.error);
+
+      if (errorResp.local) {
+        // TODO: show modal with PRO feature upgrade
+      }
+    }
+  }
 
   isLoading.value = false;
   closeRef.value!.click();
@@ -132,7 +171,7 @@ const onImgSelect = (payload: IImage & { value: string }) => {
           <FormSubmit
             className="w-full"
             variant="primary"
-            :disabled="isBoardCreating"
+            :disabled="isLoading"
           >
             {{ isLoading ? "Creating..." : "Create" }}
           </FormSubmit>

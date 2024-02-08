@@ -4,11 +4,17 @@ import { useBoard } from "@/composables/useBoard";
 import BoardNavbar from "@/components/dashboard/board/BoardNavbar.vue";
 import Navbar from "@/components/dashboard/Navbar.vue";
 import ListContainer from "@/components/dashboard/board/ListContainer.vue";
+import type { Board } from "@prisma/client";
+import type { ListWithCards } from "@/types";
+
 definePageMeta({
   middleware: "auth",
 });
 
-const { getBoard, board, list } = useBoard();
+const { getBoard, getBoardList } = useBoard();
+
+const board = ref<Board>();
+const list = ref<ListWithCards[]>();
 
 const boardTitle = computed(() => {
   return board.value?.title ? `${board.value?.title} | Taskify` : "";
@@ -26,9 +32,23 @@ if (!derivedState.value?.organization?.id) {
   router.push("/select-org");
 }
 
-onMounted(async () => {
-  getBoard(false);
-  getBoard(true);
+const getSingleBoard = async () => {
+  const response = await getBoard();
+  if (response?.id) {
+    board.value = response as Board;
+  }
+};
+
+const getList = async () => {
+  const response = await getBoardList();
+  if (Array.isArray(response)) {
+    list.value = response as ListWithCards[];
+  }
+};
+
+onMounted(() => {
+  getSingleBoard();
+  getList();
 });
 </script>
 

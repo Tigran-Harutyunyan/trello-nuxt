@@ -7,14 +7,12 @@ definePageMeta({
   layout: "organization",
   middleware: "auth",
 });
-
-const isPro = false;
 </script>
 
 <template>
   <NuxtPage />
   <div class="w-full mb-20">
-    <Info :isPro="isPro" />
+    <Info />
     <Separator class="my-4" />
     <div class="px-2 md:px-4">
       <ClientOnly>

@@ -1,21 +1,22 @@
 <script setup lang="ts">
+import { Container, Draggable } from "vue3-smooth-dnd";
+
 import type { ListWithCards } from "@/types";
 import type { Card } from "@prisma/client";
-
-import { Container, Draggable } from "vue3-smooth-dnd";
 import type { IdropResult } from "@/types";
+
 import ListForm from "./ListForm.vue";
 import ListItem from "./ListItem.vue";
+import CardModal from "~/components/modals/card-modal/CardModal.vue";
 import { useBoard } from "@/composables/useBoard";
 import { useList } from "@/composables/useList";
 import { useCard } from "@/composables/useCard";
-import CardModal from "~/components/modals/card-modal/CardModal.vue";
 
 interface ListContainerProps {
   data: ListWithCards[];
 }
 
-const { getBoard, list } = useBoard();
+const { getBoard } = useBoard();
 
 const { updateOrderList } = useList();
 
@@ -23,13 +24,15 @@ const { updateCardOrder } = useCard();
 
 const { data } = defineProps<ListContainerProps>();
 
-const orderedData = ref(data);
+const orderedData = ref<ListWithCards[]>(data);
 
 const updateBoard = async () => {
   // board data changed. Update
-  await getBoard(true);
-  if (list.value) {
-    orderedData.value = list.value;
+
+  const response = await getBoard();
+
+  if (response.id) {
+    orderedData.value = response as ListWithCards[];
   }
 };
 

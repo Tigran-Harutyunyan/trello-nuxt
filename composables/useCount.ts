@@ -4,62 +4,16 @@ export const useCount = () => {
     const { state } = useClerkProvide();
     const isLoadingCount = ref(false);
 
-    const availableCount = ref();
-
     const canCreate = ref()
 
     const getAvailableCount = async (orgId: string) => {
-
-        isLoadingCount.value = true;
         try {
-            const response = await $fetch(
+            return await $fetch(
                 `/api/count/availablecount?orgId=${orgId}`,
-                {
-                    method: "get",
-                }
+                { method: "get" }
             );
-
-            if (typeof response === "number") { availableCount.value = response; }
-        } catch (e) {
-
-        } finally {
-            isLoadingCount.value = false
-        }
-    }
-
-    const decreaseAvailableCount = async () => {
-        isLoadingCount.value = true;
-        try {
-            const response = await $fetch(
-                `/api/count/decreaseAvailableCount?orgId=${state.organization?.id}`,
-                {
-                    method: "get",
-                }
-            );
-
-
-        } catch (e) {
-
-        } finally {
-            isLoadingCount.value = false
-        }
-    }
-
-    const incrementAvailableCount = async () => {
-        isLoadingCount.value = true;
-        try {
-            const response = await $fetch(
-                `/api/count/incrementAvailableCount?orgId=${state.organization?.id}`,
-                {
-                    method: "get",
-                }
-            );
-
-
-        } catch (e) {
-
-        } finally {
-            isLoadingCount.value = false
+        } catch (error) {
+            return error;
         }
     }
 
@@ -87,7 +41,6 @@ export const useCount = () => {
         getAvailableCount,
         hasAvailableCount,
         isLoadingCount,
-        availableCount,
         canCreate
     }
 }

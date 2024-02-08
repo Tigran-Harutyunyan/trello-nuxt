@@ -5,14 +5,12 @@ import Info from "~/components/dashboard/organizations/Info.vue";
 definePageMeta({
   layout: "organization",
 });
-
-const isPro = ref(false);
 </script>
 
 <template>
   <div class="flex flex-col w-full">
     <ClientOnly>
-      <Info :isPro="isPro" />
+      <Info />
       <Separator class="my-2" />
       <ActivityList />
     </ClientOnly>

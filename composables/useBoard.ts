@@ -1,52 +1,37 @@
 import { useClerkProvide } from 'vue-clerk';
-import type { ListWithCards } from "@/types"
-import type { Board } from "@prisma/client";
-
 
 export const useBoard = () => {
     const { state } = useClerkProvide();
 
     const orgId = state.organization?.id;
 
-    const isLoadingBoard = ref(false);
-
     const route = useRoute();
 
-    const board = ref<Board>();
 
-    const list = ref<ListWithCards[]>();
-
-    if (!(route.params?.id && orgId)) {
-        throw Error("missing params")
-    }
-
-    const getBoard = async (isList: boolean) => {
-
-        isLoadingBoard.value = true;
-
-        let url = `/api/board?boardId=${route.params.id}&orgId=${orgId}`;
-
-        if (isList) {
-            url = url + "&isList=true";
-        }
-
+    const getBoard = async () => {
         try {
+            const url = `/api/board?boardId=${route.params.id}&orgId=${orgId}`;
 
-            const response = await $fetch(url, {
+            return await $fetch(url, {
                 method: "get",
             });
 
-            if (response?.id) {
-                board.value = response as Board;
-            }
+        } catch (error) {
+            return error
+        }
+    }
 
-            if (Array.isArray(response)) {
-                list.value = response as ListWithCards[];
-            }
-        } catch (e) {
+    const getBoardList = async () => {
 
-        } finally {
-            isLoadingBoard.value = false
+        const url = `/api/board?boardId=${route.params.id}&orgId=${orgId}&isList=true`;
+
+        try {
+            return await $fetch(url, {
+                method: "get",
+            });
+
+        } catch (error) {
+            return error
         }
     }
 
@@ -86,12 +71,38 @@ export const useBoard = () => {
         }
     }
 
+    const getBoards = async (orgId: string) => {
+        try {
+            return await $fetch(`/api/boards?orgId=${orgId}`, {
+                method: "get",
+            });
+        } catch (error) {
+            return error
+        }
+    }
+
+    const createBoard = async (params) => {
+        try {
+
+            return await $fetch(`/api/board?`, {
+                method: "post",
+                body: {
+                    orgId: state.organization?.id,
+                    ...params
+                },
+            });
+
+        } catch (e) {
+            return e
+        }
+    }
+
     return {
         getBoard,
         deleteBoard,
-        isLoadingBoard,
-        board,
-        list,
-        updateBoard
+        updateBoard,
+        getBoardList,
+        getBoards,
+        createBoard
     }
 }
