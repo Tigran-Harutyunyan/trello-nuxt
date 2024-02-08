@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { ListWithCards } from "@/types";
+import type { Card } from "@prisma/client";
+
 import { Container, Draggable } from "vue3-smooth-dnd";
 import type { IdropResult } from "@/types";
 import ListForm from "./ListForm.vue";
@@ -7,6 +9,7 @@ import ListItem from "./ListItem.vue";
 import { useBoard } from "@/composables/useBoard";
 import { useList } from "@/composables/useList";
 import { useCard } from "@/composables/useCard";
+import CardModal from "~/components/modals/card-modal/CardModal.vue";
 
 interface ListContainerProps {
   data: ListWithCards[];
@@ -30,8 +33,55 @@ const updateBoard = async () => {
   }
 };
 
+const onCreateCard = (payload: Card) => {
+  orderedData.value.forEach((list) => {
+    if (list.id === payload.listId) {
+      list.cards.push(payload);
+    }
+  });
+};
+
+const onDeleteCard = (payload: Card) => {
+  orderedData.value.forEach((list) => {
+    if (list.id === payload.listId) {
+      const deletedIndex = list.cards.findIndex(
+        (item) => item.order === payload.order
+      );
+      list.cards.splice(deletedIndex, 1);
+    }
+  });
+};
+
+const onCreateList = (payload: ListWithCards) => {
+  payload.cards = [];
+  orderedData.value.push(payload);
+};
+
+const onDeleteList = (payload: ListWithCards) => {
+  const deleteIndex = orderedData.value.findIndex(
+    (list) => list.id === payload.id
+  );
+  orderedData.value.splice(deleteIndex, 1);
+};
+
+const onUpdateCard = (payload: Card) => {
+  orderedData.value.forEach((list) => {
+    if (list.id === payload.listId) {
+      const editIndex = list.cards.findIndex(
+        (item) => item.order === payload.order
+      );
+      list.cards[editIndex] = payload;
+    }
+  });
+};
+
 provide("board", {
   updateBoard,
+  onCreateCard,
+  onDeleteCard,
+  onCreateList,
+  onDeleteList,
+  onUpdateCard,
 });
 
 // User moves a list
@@ -132,7 +182,7 @@ const applyDrag = (arr: any, dropResult: IdropResult) => {
 
 <template>
   <div class="flex gap-3 pr-5">
-    <div class="">
+    <div v-show="orderedData.length">
       <Container
         orientation="horizontal"
         group-name="lists"
@@ -158,6 +208,7 @@ const applyDrag = (arr: any, dropResult: IdropResult) => {
       <div class="flex-shrink-0 w-1"></div>
     </div>
   </div>
+  <CardModal />
 </template>
 <style scoped>
 .smooth-dnd-container.horizontal {
