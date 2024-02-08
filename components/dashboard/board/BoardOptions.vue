@@ -7,10 +7,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { PopoverClose } from "radix-vue";
-
+import { toast } from "vue-sonner";
 import { useBoard } from "@/composables/useBoard";
 
 const router = useRouter();
+
 const { deleteBoard } = useBoard();
 
 interface BoardOptionsProps {
@@ -24,7 +25,12 @@ const closeRef = ref();
 const onDelete = async () => {
   closeRef.value.$el.click();
 
-  await deleteBoard(id);
+  const { orgId, board } = await deleteBoard(id);
+
+  if (board?.id && orgId) {
+    toast.success(`Deleted ${board.title} board.`);
+    router.push(`/organization/${orgId}`);
+  }
 };
 </script>
 

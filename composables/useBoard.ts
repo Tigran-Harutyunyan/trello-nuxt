@@ -1,22 +1,22 @@
 import { useClerkProvide } from 'vue-clerk';
 import type { ListWithCards } from "@/types"
 import type { Board } from "@prisma/client";
-import { toast } from 'vue-sonner';
+
 
 export const useBoard = () => {
     const { state } = useClerkProvide();
+
+    const orgId = state.organization?.id;
 
     const isLoadingBoard = ref(false);
 
     const route = useRoute();
 
-    const router = useRouter();
-
     const board = ref<Board>();
 
     const list = ref<ListWithCards[]>();
 
-    if (!(route.params?.id && state.organization?.id)) {
+    if (!(route.params?.id && orgId)) {
         throw Error("missing params")
     }
 
@@ -24,7 +24,7 @@ export const useBoard = () => {
 
         isLoadingBoard.value = true;
 
-        let url = `/api/board?boardId=${route.params.id}&orgId=${state.organization?.id}`;
+        let url = `/api/board?boardId=${route.params.id}&orgId=${orgId}`;
 
         if (isList) {
             url = url + "&isList=true";
@@ -51,17 +51,19 @@ export const useBoard = () => {
     }
 
     const deleteBoard = async (id: string) => {
-        let url = `/api/board?id=${id}&orgId=${state.organization?.id}`;
+
+        let url = `/api/board?id=${id}&orgId=${orgId}`;
+
         try {
             const response = await $fetch(url, {
                 method: "delete",
             });
 
-            if (response?.id) {
-                toast.success(`Deleted ${response.title} board.`);
-                router.push(`/organization/${state.organization?.id}`)
-                return response;
+            return {
+                board: response,
+                orgId
             }
+
         } catch (error) {
             return error;
         }
@@ -73,7 +75,7 @@ export const useBoard = () => {
             return await $fetch(`/api/board/update?`, {
                 method: "post",
                 body: {
-                    orgId: state.organization?.id,
+                    orgId: orgId,
                     title,
                     id
                 },
