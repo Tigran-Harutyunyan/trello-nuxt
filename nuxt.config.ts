@@ -29,6 +29,7 @@ export default defineNuxtConfig({
       clerkPublishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     },
     clerkSecretKey: process.env.CLERK_SECRET_KEY,
+    unsplashAccessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
   },
   googleFonts: {
     subsets: 'latin',
