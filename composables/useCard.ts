@@ -1,16 +1,25 @@
 import { useClerkProvide } from 'vue-clerk';
-import type { ListWithCards } from "@/types"
-import type { Board } from "@prisma/client";
+
 import { toast } from 'vue-sonner';
 
 export const useCard = () => {
     const { state } = useClerkProvide();
 
-    const isLoadingBoard = ref(false);
+    const isLoadingCard = ref(false);
+
+    const isLoadingLogs = ref(false);
 
     const isCreating = ref(false);
 
+    const isLoadingCopy = ref(false);
+
+    const isLoadingDelete = ref(false);
+
+    const auditLogsData = ref();
+
     const route = useRoute();
+
+    const cardData = ref();
 
     if (!(route.params?.id && state.organization?.id)) {
         throw Error("missing params")
@@ -18,8 +27,9 @@ export const useCard = () => {
 
     interface IupdateParams {
         id: string
-        boardId: string
-        title: string
+        title?: string
+        description?: string
+        orgId: string | undefined
     }
 
     interface IcreateParams {
@@ -27,26 +37,34 @@ export const useCard = () => {
         title: string
     }
 
-    const updateCard = async (params: IupdateParams) => {
-        const { id, boardId, title } = params;
+    const updateCard = async (params: Omit<IupdateParams, 'orgId'>) => {
+        const { id, title, description } = params;
+
+        let payload: IupdateParams = {
+            orgId: state.organization?.id,
+            id
+        }
+        if (title) {
+            payload.title = title
+        }
+
+        if (description) {
+            payload.description = description
+        }
+
         try {
-            const response = await $fetch('/api/list/update?', {
+            const response = await $fetch('/api/card/update?', {
                 method: "post",
-                body: {
-                    orgId: state.organization?.id,
-                    boardId,
-                    id,
-                    title
-                },
+                body: payload,
             });
 
             if (response?.id) {
-                toast.success(`Renamed to "${title}"`);
+                toast.success(`Updated card`);
+                return response;
             }
-        } catch (e) {
-
+        } catch (error) {
+            return error;
         } finally {
-            isLoadingBoard.value = false
         }
     }
 
@@ -67,9 +85,10 @@ export const useCard = () => {
 
             if (response?.id) {
                 toast.success(`Card  "${title}" created"`);
+                return response
             }
-        } catch (e) {
-            // TODO: handle errors
+        } catch (error) {
+            return error;
         } finally {
             isCreating.value = false;
         }
@@ -95,18 +114,105 @@ export const useCard = () => {
         }
     }
 
-    const deleteCard = async () => {
-        let url = `/api/board?boardId=${route.params.id}&orgId=${state.organization?.id}`;
+    const deleteCard = async (cardId: string) => {
+        isLoadingDelete.value = true;
 
-        const response = await $fetch(url, {
-            method: "delete",
-        });
+        let url = `/api/cards/${cardId}/delete?orgId=${state.organization?.id}`;
+
+        try {
+            const response = await $fetch(url, {
+                method: "delete",
+            });
+
+            if (response?.id) {
+                toast.success("Card is deleted");
+                return response;
+            }
+        } catch (error) {
+            return error;
+        } finally {
+            isLoadingDelete.value = false;
+        }
+
     }
 
+    const getCardLogs = async (id: string) => {
+        let url = `/api/cards/${id}/logs?&orgId=${state.organization?.id}`;
+
+        isLoadingLogs.value = true;
+
+        try {
+            const response = await $fetch(url, {
+                method: "get",
+            });
+
+            if (response && Array.isArray(response)) {
+                auditLogsData.value = response;
+            }
+        } catch (error) {
+            return error;
+        } finally {
+            isLoadingLogs.value = false
+        }
+    }
+
+    const getCard = async (cardId: string) => {
+        let url = `/api/card/${cardId}?&orgId=${state.organization?.id}`;
+
+        try {
+            isLoadingCard.value = true;
+            const response = await $fetch(url, {
+                method: "get",
+            });
+
+            if (response?.id) {
+                cardData.value = response;
+            }
+        } catch (error) {
+
+        } finally {
+            isLoadingCard.value = false;
+        }
+    }
+
+    const copyCard = async (cardId: string) => {
+        let url = `/api/cards/${cardId}/copy?`;
+
+        try {
+            isLoadingCopy.value = true;
+
+            const response = await $fetch(url, {
+                method: "post",
+                body: {
+                    orgId: state.organization?.id
+                }
+            });
+
+            if (response?.id) {
+                toast.success("Card is copied");
+                return response;
+            }
+        } catch (error) {
+            return error;
+        } finally {
+            isLoadingCopy.value = false;
+        }
+    }
 
     return {
         createCard,
         updateCardOrder,
-        isCreating
+        updateCard,
+        getCardLogs,
+        getCard,
+        deleteCard,
+        copyCard,
+        isCreating,
+        isLoadingCard,
+        auditLogsData,
+        cardData,
+        isLoadingLogs,
+        isLoadingDelete,
+        isLoadingCopy
     }
 }

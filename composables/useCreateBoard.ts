@@ -13,7 +13,7 @@ type payload = Omit<Iboard, 'id'>;
 export const useCreateBoard = () => {
     const { state } = useClerkProvide();
 
-    const fieldErrors = ref()
+    const fieldErrors = ref();
 
     const isBoardCreating = ref(false);
 
@@ -21,11 +21,18 @@ export const useCreateBoard = () => {
 
     const board = ref<Iboard>();
 
+    type boardError = {
+        error: string,
+        local?: boolean,
+        upgrade?: boolean
+    }
     const createBoard = async (params: payload) => {
         isBoardCreating.value = true;
 
         try {
-            const response = await $fetch(`/api/board?`, {
+            let response: Iboard | boardError
+
+            response = await $fetch(`/api/board?`, {
                 method: "post",
                 body: {
                     orgId: state.organization?.id,
@@ -33,13 +40,18 @@ export const useCreateBoard = () => {
                 },
             });
 
-            if (response.id) {
-                board.value = response as Iboard;
+            if ('id' in response) {
+                board.value = response;
                 toast.success("Board created!");
                 router.push(`/board/${response.id}`);
             }
+            if ('error' in response) {
+                toast.error(response.error);
+                if (response.local) {
+                    // TODO: show modal with PRO feature upgrade
+                }
+            }
 
-            // show modal with PRO feature upgrade if it has errors
         } catch (e) {
             fieldErrors.value = e.message
         } finally {

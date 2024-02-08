@@ -72,9 +72,10 @@ export const useList = () => {
 
             if (response?.id) {
                 toast.success(`List "${title}" created"`);
+                return response
             }
-        } catch (e) {
-
+        } catch (error) {
+            return error;
         } finally {
             isCreatingList.value = false;
         }
@@ -94,9 +95,10 @@ export const useList = () => {
 
             if (response?.id) {
                 toast.success(`List copied."`);
+                return response
             }
-        } catch (e) {
-
+        } catch (error) {
+            return error;
         } finally {
             isLoadingBoard.value = false
         }
@@ -106,14 +108,19 @@ export const useList = () => {
         const { id, boardId } = params;
         let url = `/api/list/delete?id=${id}&boardId=${boardId}&orgId=${state.organization?.id}`;
 
+        try {
+            const response = await $fetch(url, {
+                method: "delete",
+            });
 
-        const response = await $fetch(url, {
-            method: "delete",
-        });
-
-        if (response?.id) {
-            toast.success(`List ${response.title} deleted."`);
+            if (response?.id) {
+                toast.success(`List ${response?.title} deleted."`);
+                return response;
+            }
+        } catch (error) {
+            return error
         }
+
     }
 
     const updateOrderList = async (params) => {

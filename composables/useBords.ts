@@ -1,7 +1,5 @@
-import { useClerkProvide } from 'vue-clerk'
-
 export const useBoards = () => {
-    const { state } = useClerkProvide();
+
     const isLoadingBoards = ref(false);
 
     interface Iboard {

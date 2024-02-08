@@ -1,6 +1,7 @@
 import { useClerkProvide } from 'vue-clerk';
 import type { ListWithCards } from "@/types"
 import type { Board } from "@prisma/client";
+import { toast } from 'vue-sonner';
 
 export const useBoard = () => {
     const { state } = useClerkProvide();
@@ -8,6 +9,8 @@ export const useBoard = () => {
     const isLoadingBoard = ref(false);
 
     const route = useRoute();
+
+    const router = useRouter();
 
     const board = ref<Board>();
 
@@ -46,14 +49,23 @@ export const useBoard = () => {
         }
     }
 
-    const deleteBoard = async () => {
-        let url = `/api/board?boardId=${route.params.id}&orgId=${state.organization?.id}`;
+    const deleteBoard = async (id: string) => {
+        let url = `/api/board?id=${id}&orgId=${state.organization?.id}`;
+        try {
+            const response = await $fetch(url, {
+                method: "delete",
+            });
 
-        const response = await $fetch(url, {
-            method: "delete",
-        });
+            if (response?.id) {
+                toast.success(`Deleted ${response.title} board.`);
+                router.push(`/organization/${state.organization?.id}`)
+                return response;
+            }
+        } catch (error) {
+            return error;
+        }
+
     }
-
 
     return {
         getBoard,
