@@ -4,7 +4,6 @@ import { useBoard } from "@/composables/useBoard";
 import BoardNavbar from "@/components/dashboard/board/BoardNavbar.vue";
 import Navbar from "@/components/dashboard/Navbar.vue";
 import ListContainer from "@/components/dashboard/board/ListContainer.vue";
-
 definePageMeta({
   middleware: "auth",
 });
