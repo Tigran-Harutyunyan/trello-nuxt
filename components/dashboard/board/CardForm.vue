@@ -12,7 +12,7 @@ interface CardFormProps {
 const { listId, isEditing } = defineProps<CardFormProps>();
 const emit = defineEmits(["enableEditing", "disableEditing"]);
 
-const { updateBoard } = inject("board");
+const { onCreateCard } = inject("board");
 
 const inputRef = ref();
 
@@ -32,13 +32,15 @@ const onSubmit = async () => {
     return;
   }
   // Update DB.
-  await createCard({
+  const res = await createCard({
     title: title.value,
     listId,
   });
 
   emit("disableEditing");
-  updateBoard();
+  if (res?.id) {
+    onCreateCard(res);
+  }
 };
 
 const onChange = (text: string) => {
