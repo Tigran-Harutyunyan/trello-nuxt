@@ -15,7 +15,7 @@ import { useList } from "@/composables/useList";
 
 const { copyList, deleteList } = useList();
 
-const { updateBoard } = inject("board");
+const { onDeleteList, onCreateList } = inject("board");
 
 const emit = defineEmits(["onAddCard"]);
 
@@ -29,14 +29,19 @@ const closeRef = ref();
 
 const onDelete = async () => {
   closeRef.value.$el.click();
-  await deleteList({ id: data.id, boardId: data.boardId });
-  updateBoard();
+
+  const res = await deleteList({ id: data.id, boardId: data.boardId });
+  if (res?.id) {
+    onDeleteList(res);
+  }
 };
 
 const onCopy = async () => {
   closeRef.value.$el.click();
-  await copyList({ id: data.id, boardId: data.boardId });
-  updateBoard();
+  const res = await copyList({ id: data.id, boardId: data.boardId });
+  if (res?.id) {
+    onCreateList(res);
+  }
 };
 </script>
 

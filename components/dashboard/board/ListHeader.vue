@@ -14,7 +14,7 @@ interface ListHeaderProps {
 const { data } = defineProps<ListHeaderProps>();
 const title = ref(data.title);
 
-const inputRef = ref<HTMLInputElement | undefined>();
+const inputRef = ref();
 const isEditing = ref(false);
 
 const { updateList } = useList();
