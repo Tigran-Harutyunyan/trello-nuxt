@@ -5,6 +5,9 @@ import type { ListWithCards, IdropResult } from "@/types";
 import CardForm from "./CardForm.vue";
 import CardItem from "./CardItem.vue";
 import ListHeader from "./ListHeader.vue";
+import { useMainStore } from "@/store/store";
+
+const { onOpenCardModal, setPendingCard } = useMainStore();
 
 interface ListItemProps {
   data: ListWithCards;
@@ -66,6 +69,11 @@ const dragEnter = (_, index: number) => {
   // Set start column index for future transformation.
   currentDrugEnter.value = index;
 };
+
+const showModal = (id: string) => {
+  setPendingCard(id);
+  onOpenCardModal();
+};
 </script>
 
 <template>
@@ -86,7 +94,12 @@ const dragEnter = (_, index: number) => {
         class="mx-1 px-1 py-0.5 flex flex-col gap-y-2"
         :class="data.cards.length > 0 && index === 0 ? 'mt-2' : 'mt-1'"
       >
-        <CardItem class="column-drag-handle2" :index="index" :data="card" />
+        <CardItem
+          class="column-drag-handle2"
+          :index="index"
+          :data="card"
+          @open="showModal"
+        />
       </ol>
     </Draggable>
   </Container>
