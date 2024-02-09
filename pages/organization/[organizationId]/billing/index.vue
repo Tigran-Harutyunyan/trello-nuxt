@@ -1,9 +1,18 @@
 <script setup lang="ts">
+import { Separator } from "@/components/ui/separator";
+import Info from "@/components/dashboard/organizations/Info.vue";
+import SubscriptionButton from "@/components/dashboard/organizations/SubscriptionButton.vue";
 definePageMeta({
   layout: "organization",
 });
 </script>
 
 <template>
-  <div class="my-20"></div>
+  <ClientOnly>
+    <div className="w-full">
+      <Info />
+      <Separator class="my-2" />
+      <SubscriptionButton />
+    </div>
+  </ClientOnly>
 </template>
