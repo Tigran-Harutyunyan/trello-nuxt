@@ -11,6 +11,7 @@ import FormSubmit from "./FormSubmit.vue";
 
 import useValidation from "@/composables/useValidation";
 import { useBoard } from "@/composables/useBoard";
+import { useMainStore } from "@/store/store";
 
 import {
   Popover,
@@ -19,6 +20,8 @@ import {
 } from "@/components/ui/popover";
 
 import { type IImage } from "@/types";
+
+const { openProModal } = useMainStore();
 
 const isLoading = ref(false);
 
@@ -87,7 +90,7 @@ const imageValues = ref("");
 const onSubmit = async () => {
   await validate();
 
-  if (!isValid) {
+  if (typeof errors.value === null) {
     return;
   }
 
@@ -118,14 +121,15 @@ const onSubmit = async () => {
 
       toast.error(errorResp.error);
 
-      if (errorResp.local) {
-        // TODO: show modal with PRO feature upgrade
+      if (errorResp.local && errorResp.upgrade) {
+        // show modal with PRO feature upgrade
+        openProModal();
       }
     }
   }
 
   isLoading.value = false;
-  closeRef.value!.click();
+  closeRef.value?.click();
 };
 
 const onImgSelect = (payload: IImage & { value: string }) => {

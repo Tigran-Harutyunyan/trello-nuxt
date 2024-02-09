@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { useClerk, useClerkProvide } from "vue-clerk";
 import { User2, HelpCircle } from "lucide-vue-next";
-import BoardListSkeleton from "@/components/dashboard/organizations/BoardListSkeleton.vue";
+import { Skeleton } from "@/components/ui/skeleton";
 import Hint from "@/components/Hint.vue";
 import FormPopover from "@/components/ui/form/FormPopover.vue";
+import OrgControl from "~/components/dashboard/organizations/OrgControl.vue";
 
 import { useBoard } from "@/composables/useBoard";
-import { useSubscription } from "@/composables/useSubscription";
-import { useCount } from "@/composables/useCount";
 
 import { MAX_FREE_BOARDS } from "@/constants/boards";
+
+import { useMainStore } from "@/store/store";
+
+const { isPro, availableCount } = storeToRefs(useMainStore());
 
 interface Iboard {
   id: string;
@@ -21,23 +23,13 @@ interface Iboard {
   imageLinkHTML: string;
 }
 
-const { derivedState } = useClerkProvide();
-
-const { setActive, getOrganizationMemberships } = useClerk();
-
-const userMemberships = await getOrganizationMemberships();
-
-const route = useRoute();
-
-const isLoadingBoards = ref(false);
+const isLoadingBoards = ref(true);
 
 const boards = ref<Iboard[]>();
 
 const { getBoards } = useBoard();
-const { checkSubscription, isPro } = useSubscription();
-const { getAvailableCount, availableCount } = useCount();
 
-const getData = async (orgId) => {
+const initBoardsRequest = async (orgId: string) => {
   isLoadingBoards.value = true;
 
   const response = await getBoards(orgId);
@@ -48,37 +40,22 @@ const getData = async (orgId) => {
 
   isLoadingBoards.value = false;
 };
-
-onMounted(() => {
-  checkSubscription();
-});
-
-watch(
-  () => route,
-  async () => {
-    const paramsOrgId = route.params?.organizationId;
-
-    const isValidOrgId = userMemberships.some(
-      (mem) => mem.organization.id === paramsOrgId
-    );
-
-    if (isValidOrgId && derivedState.value?.orgId !== paramsOrgId) {
-      setActive({
-        organization: paramsOrgId as string,
-      });
-    }
-
-    getData(paramsOrgId);
-    getAvailableCount(paramsOrgId);
-  },
-  {
-    immediate: true,
-  }
-);
 </script>
 
 <template>
-  <BoardListSkeleton v-if="isLoadingBoards" />
+  <div
+    v-if="isLoadingBoards"
+    class="grid gird-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+  >
+    <Skeleton class="aspect-video h-full w-full p-2" />
+    <Skeleton class="aspect-video h-full w-full p-2" />
+    <Skeleton class="aspect-video h-full w-full p-2" />
+    <Skeleton class="aspect-video h-full w-full p-2" />
+    <Skeleton class="aspect-video h-full w-full p-2" />
+    <Skeleton class="aspect-video h-full w-full p-2" />
+    <Skeleton class="aspect-video h-full w-full p-2" />
+    <Skeleton class="aspect-video h-full w-full p-2" />
+  </div>
   <div class="space-y-4" v-else>
     <div class="flex items-center font-semibold text-lg text-neutral-700">
       <User2 class="h-6 w-6 mr-2" />
@@ -127,4 +104,5 @@ watch(
       </ClientOnly>
     </div>
   </div>
+  <OrgControl @change="(id) => initBoardsRequest(id)" />
 </template>

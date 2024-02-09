@@ -7,7 +7,7 @@ import CardItem from "./CardItem.vue";
 import ListHeader from "./ListHeader.vue";
 import { useMainStore } from "@/store/store";
 
-const { onOpenCardModal, setPendingCard } = useMainStore();
+const { openCardModal, setPendingCard } = useMainStore();
 
 interface ListItemProps {
   data: ListWithCards;
@@ -72,7 +72,7 @@ const dragEnter = (_, index: number) => {
 
 const showModal = (id: string) => {
   setPendingCard(id);
-  onOpenCardModal();
+  openCardModal();
 };
 </script>
 

@@ -12,7 +12,7 @@ export const useMainStore = defineStore("main", () => {
     pendingCardId.value = id;
   }
 
-  const onOpenCardModal = () => {
+  const openCardModal = () => {
     isCardModalOpen.value = true;
   }
 
@@ -20,7 +20,7 @@ export const useMainStore = defineStore("main", () => {
     isCardModalOpen.value = false;
   }
 
-  const onOpenSidebar = () => {
+  const openSidebar = () => {
     isSidebarOpen.value = true;
   }
 
@@ -51,9 +51,9 @@ export const useMainStore = defineStore("main", () => {
     isProModalOpen,
     isPro,
     availableCount,
-    onOpenSidebar,
+    openSidebar,
     closeCardModal,
-    onOpenCardModal,
+    openCardModal,
     setPendingCard,
     openProModal,
     closeProModal,

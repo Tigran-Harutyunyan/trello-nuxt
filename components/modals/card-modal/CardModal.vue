@@ -19,7 +19,7 @@ import Actions from "./Actions.vue";
 import { useCard } from "~/composables/useCard";
 
 const { isCardModalOpen, pendingCardId } = storeToRefs(useMainStore());
-const { resetPendingCard, onCloseCardModal } = useMainStore();
+const { resetPendingCard, closeCardModal } = useMainStore();
 
 const {
   getCardLogs,
@@ -71,7 +71,7 @@ watch(
           </div>
         </div>
         <ActionsSkeleton v-if="isLoadingCard" />
-        <Actions :data="cardData" @close="onCloseCardModal" v-else />
+        <Actions :data="cardData" @close="closeCardModal" v-else />
       </div>
     </DialogContent>
   </Dialog>

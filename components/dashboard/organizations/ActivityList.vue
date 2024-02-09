@@ -2,6 +2,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import ActivityItem from "@/components/ActivityItem.vue";
 import { useLogs } from "@/composables/useLogs";
+import OrgControl from "~/components/dashboard/organizations/OrgControl.vue";
 
 interface Log {
   id: string;
@@ -22,22 +23,14 @@ const { getLogs } = useLogs();
 const isLoading = ref(true);
 const auditLogs = ref<Log[]>([]);
 
-const fetchData = async () => {
-  const paramsOrgId = useRoute().params?.organizationId;
-  const response = await getLogs(paramsOrgId);
+const fetchData = async (orgId: string) => {
+  const response = await getLogs(orgId);
 
   isLoading.value = false;
   if (Array.isArray(response)) {
     auditLogs.value = response;
   }
 };
-
-onMounted(() => {
-  // Settimeout is need because the organization is being switched
-  setTimeout(() => {
-    fetchData();
-  }, 300);
-});
 </script>
 
 <template>
@@ -61,4 +54,5 @@ onMounted(() => {
       </ol>
     </template>
   </template>
+  <OrgControl @change="fetchData" />
 </template>

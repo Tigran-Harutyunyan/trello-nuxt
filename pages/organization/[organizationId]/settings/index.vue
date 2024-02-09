@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { OrganizationProfile } from "vue-clerk";
+import OrgControl from "~/components/dashboard/organizations/OrgControl.vue";
+
 definePageMeta({
   layout: "organization",
 });
+
 const appearance = {
   elements: {
     rootBox: {
@@ -22,4 +25,5 @@ const appearance = {
   <div class="w-full">
     <OrganizationProfile :appearance="appearance" />
   </div>
+  <OrgControl />
 </template>

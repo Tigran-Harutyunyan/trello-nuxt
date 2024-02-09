@@ -5,13 +5,13 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import Sidebar from "./Sidebar.vue";
 import { useMainStore } from "@/store/store";
 
-const { onOpenSidebar } = useMainStore();
+const { openSidebar } = useMainStore();
 const { isSidebarOpen } = storeToRefs(useMainStore());
 </script>
 
 <template>
   <Button
-    @click="onOpenSidebar"
+    @click="openSidebar"
     class="block md:hidden mr-2"
     variant="ghost"
     size="sm"

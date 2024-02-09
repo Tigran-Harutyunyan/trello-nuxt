@@ -2,6 +2,8 @@
 import { Separator } from "@/components/ui/separator";
 import Info from "@/components/dashboard/organizations/Info.vue";
 import SubscriptionButton from "@/components/dashboard/organizations/SubscriptionButton.vue";
+import OrgControl from "~/components/dashboard/organizations/OrgControl.vue";
+
 definePageMeta({
   layout: "organization",
 });
@@ -15,4 +17,5 @@ definePageMeta({
       <SubscriptionButton />
     </div>
   </ClientOnly>
+  <OrgControl />
 </template>
