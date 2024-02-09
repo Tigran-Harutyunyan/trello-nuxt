@@ -1,11 +1,8 @@
-import { useClerkProvide } from 'vue-clerk'
-
 export const useSubscription = () => {
-    const { state } = useClerkProvide();
-    const checkSubscription = async () => {
+    const checkSubscription = async (orgId: string) => {
         try {
             return await $fetch(
-                `/api/subscription?orgId=${state.organization?.id}`,
+                `/api/subscription?orgId=${orgId}`,
                 { method: "get" }
             );
         } catch (e) {
