@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@nuxtjs/google-fonts', '@pinia/nuxt', '@nuxt/image'],
+  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@nuxtjs/google-fonts', '@pinia/nuxt', '@fixers/nuxt-stripe', '@nuxt/image'],
 
   shadcn: {
     /**
@@ -27,9 +27,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       clerkPublishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+      appUrl: process.env.NEXT_PUBLIC_APP_URL,
+      unsplashAccessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY,
     },
     clerkSecretKey: process.env.CLERK_SECRET_KEY,
-    unsplashAccessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY
+    stripeKey: process.env.STRIPE_API_KEY,
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET
   },
   googleFonts: {
     subsets: 'latin',
