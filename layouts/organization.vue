@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Navbar from "@/components/dashboard/Navbar.vue";
 import Sidebar from "@/components/dashboard/Sidebar.vue";
+import ProModal from "~/components/modals/ProModal.vue";
 </script>
 <template>
   <div class="h-full">
@@ -16,4 +17,7 @@ import Sidebar from "@/components/dashboard/Sidebar.vue";
       </div>
     </main>
   </div>
+  <ClientOnly>
+    <ProModal />
+  </ClientOnly>
 </template>
