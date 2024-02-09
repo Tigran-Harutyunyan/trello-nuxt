@@ -3,7 +3,10 @@ import { defineStore } from "pinia";
 export const useMainStore = defineStore("main", () => {
   const isSidebarOpen = ref(false);
   const isCardModalOpen = ref(false);
+  const isProModalOpen = ref(false);
   const pendingCardId = ref(''); // Id of card to open modal with.
+  const isPro = ref(false);
+  const availableCount = ref();
 
   const setPendingCard = (id: string) => {
     pendingCardId.value = id;
@@ -13,7 +16,7 @@ export const useMainStore = defineStore("main", () => {
     isCardModalOpen.value = true;
   }
 
-  const onCloseCardModal = () => {
+  const closeCardModal = () => {
     isCardModalOpen.value = false;
   }
 
@@ -21,23 +24,41 @@ export const useMainStore = defineStore("main", () => {
     isSidebarOpen.value = true;
   }
 
-  const onCloseSidebar = () => {
-    isSidebarOpen.value = false;
+  const openProModal = () => {
+    isProModalOpen.value = true;
+  }
+
+  const closeProModal = () => {
+    isProModalOpen.value = false;
   }
 
   const resetPendingCard = () => {
-    pendingCardId.value = '';
+    pendingCardId.value = "";
+  }
+
+  const setPro = (value: boolean) => {
+    isPro.value = value;
+  }
+
+  const setAvailableCount = (value: number) => {
+    availableCount.value = value;
   }
 
   return {
     isSidebarOpen,
     isCardModalOpen,
     pendingCardId,
+    isProModalOpen,
+    isPro,
+    availableCount,
     onOpenSidebar,
-    onCloseSidebar,
-    onCloseCardModal,
+    closeCardModal,
     onOpenCardModal,
     setPendingCard,
-    resetPendingCard
+    openProModal,
+    closeProModal,
+    resetPendingCard,
+    setPro,
+    setAvailableCount
   };
 });
