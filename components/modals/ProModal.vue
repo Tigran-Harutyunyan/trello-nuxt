@@ -55,7 +55,7 @@ const onUpgrade = async () => {
           class="w-full"
           variant="primary"
         >
-          Upgrade
+          {{ isLoading ? "Wait..." : "Upgrade" }}
         </Button>
       </div>
     </DialogContent>
