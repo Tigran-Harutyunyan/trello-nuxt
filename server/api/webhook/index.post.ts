@@ -1,7 +1,6 @@
 import prisma from "../../../libs/prismadb";
 import Stripe from "stripe";
-import { defineStripeWebhook } from '@fixers/nuxt-stripe/server'
-
+import { defineStripeWebhook } from '@fixers/nuxt-stripe/server';
 
 /**
  * @param event - the H3 event
@@ -14,16 +13,13 @@ const STRIPE_API_KEY = useRuntimeConfig().stripeKey as string;
 const webhookSecret = useRuntimeConfig().stripeWebhookSecret
 
 const stripe = new Stripe(STRIPE_API_KEY, {
-    apiVersion: "2023-10-16",
-    //typescript: true,
+    apiVersion: "2023-10-16"
 });
 
 const webhookOptions = {
     webhookSecret,
     stripe,
 }
-
-// import { createStripeEvent } from '@fixers/nuxt-stripe/server'
 
 
 export default defineStripeWebhook(async ({ event, stripeEvent }) => {
@@ -77,6 +73,17 @@ export default defineStripeWebhook(async ({ event, stripeEvent }) => {
                     ),
                 },
             });
+        }
+
+        case 'customer.subscription.updated': {
+            const subscription = await stripe.subscriptions.retrieve(
+                session.subscription as string
+            );
+            await prisma.orgSubscription.delete({
+                where: {
+                    stripeSubscriptionId: subscription.id,
+                },
+            })
         }
 
     }
