@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { SignIn } from "vue-clerk";
 
-definePageMeta({ layout: "auth", isPublicRoute: true });
+definePageMeta({
+  layout: "auth",
+  middleware: ["public"],
+});
 </script>
 
 <template>

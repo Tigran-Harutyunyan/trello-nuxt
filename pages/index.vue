@@ -6,10 +6,12 @@ import Navbar from "@/components/marketing/Navbar.vue";
 import { useClerkProvide } from "vue-clerk";
 const { derivedState } = useClerkProvide();
 
+useHead({
+  title: "Taskify",
+});
+
 definePageMeta({
-  isPublicRoute: true,
-  //isMarketingRoute: true,
-  middleware: "auth",
+  middleware: ["public"],
 });
 
 const router = useRouter();

@@ -21,13 +21,9 @@ export default defineEventHandler(async (event) => {
 
     const user = await clerkClient.users.getUser(auth.userId);
 
-    const isPro = await checkSubscription(orgId);
+    const isPro = await checkSubscription(orgId as string);
 
     let board;
-
-    if (!isPro) {
-        await decreaseAvailableCount(orgId);
-    }
 
     try {
 
@@ -39,7 +35,7 @@ export default defineEventHandler(async (event) => {
         });
 
         if (!isPro) {
-            await decreaseAvailableCount(orgId);
+            await decreaseAvailableCount(orgId as string);
         }
 
         await createAuditLog({
