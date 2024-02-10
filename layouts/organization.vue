@@ -2,6 +2,18 @@
 import Navbar from "@/components/dashboard/Navbar.vue";
 import Sidebar from "@/components/dashboard/Sidebar.vue";
 import ProModal from "~/components/modals/ProModal.vue";
+import { useClerkProvide } from "vue-clerk";
+
+const { state } = useClerkProvide();
+const boardTitle = computed(() => {
+  return state?.organization?.name
+    ? `${state?.organization?.name} | Taskify`
+    : "";
+});
+
+useHead({
+  title: boardTitle,
+});
 </script>
 <template>
   <div class="h-full">
