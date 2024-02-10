@@ -1,5 +1,4 @@
 import prisma from "../../../libs/prismadb";
-//import * as Stripe from 'stripe';
 import Stripe from "stripe";
 
 const STRIPE_API_KEY = useRuntimeConfig().stripeKey as string;
@@ -67,7 +66,7 @@ export default defineEventHandler(async (event) => {
                     },
                 ],
                 metadata: {
-                    orgId,
+                    orgId: orgId as string,
                 },
             });
 
