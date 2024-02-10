@@ -12,6 +12,8 @@ definePageMeta({
   middleware: "auth",
 });
 
+const router = useRouter();
+
 const isAuth = computed(() => {
   return !!derivedState.value?.userId;
 });
@@ -48,6 +50,15 @@ const isAuth = computed(() => {
         </div>
         <Button class="mt-6" size="lg" as-child v-if="!isAuth">
           <NuxtLink to="/sign-up"> Get Taskify for free </NuxtLink>
+        </Button>
+
+        <Button
+          size="lg"
+          class="mt-6"
+          @click="router.push(`/organization/${derivedState.organization?.id}`)"
+          v-if="derivedState.organization?.id"
+        >
+          Boards
         </Button>
       </div>
     </main>
