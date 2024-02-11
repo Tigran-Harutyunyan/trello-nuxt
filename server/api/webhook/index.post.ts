@@ -76,14 +76,14 @@ export default defineStripeWebhook(async ({ event, stripeEvent }) => {
         }
 
         case 'customer.subscription.updated': {
-            const subscription = await stripe.subscriptions.retrieve(
-                session.subscription as string
-            );
+            console.log(stripeEvent);
 
-            if (subscription?.cancellation_details?.reason) {
+            const object = stripeEvent?.data?.object;
+
+            if (object?.canceled_at && object?.id) {
                 await prisma.orgSubscription.delete({
                     where: {
-                        stripeSubscriptionId: subscription.id,
+                        stripeSubscriptionId: object?.id,
                     },
                 })
             }
