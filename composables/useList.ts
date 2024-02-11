@@ -1,6 +1,4 @@
 import { useClerkProvide } from 'vue-clerk';
-import type { ListWithCards } from "@/types"
-import type { Board } from "@prisma/client";
 import { toast } from 'vue-sonner';
 
 interface Iparams {

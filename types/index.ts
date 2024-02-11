@@ -49,20 +49,22 @@ export interface Iboard {
     updatedAt: string
 }
 
-export interface IdragPayload { // For dragg and drop payloads
+export interface IdropPayload { // For dragg and drop payloads
     id: string
     title: string
     order: number
     description: any
-    listId: string
     createdAt: string
     updatedAt: string
+    listId?: string
+    boardId?: string
+    cards?: Card[]
 }
 
 export interface IdropResult {
     removedIndex: number
     addedIndex: any
-    payload: IdragPayload
+    payload: IdropPayload
 }
 
 export interface IboardListCard {

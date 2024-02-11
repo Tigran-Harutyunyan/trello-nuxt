@@ -33,7 +33,7 @@ const fetchImages = async () => {
     }
 
     if (result.type === "error") {
-      console.error("Failed to get images from Unsplash");
+      // Failed to get images from Unsplash
       images.value = appendValues(defaultImages);
     }
   } catch (error) {

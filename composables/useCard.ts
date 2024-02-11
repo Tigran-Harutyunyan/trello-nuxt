@@ -110,7 +110,6 @@ export const useCard = () => {
             }
         } catch (e) {
             // TODO: handle errors
-        } finally {
         }
     }
 
