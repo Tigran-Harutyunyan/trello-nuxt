@@ -75,16 +75,16 @@ export default defineStripeWebhook(async ({ event, stripeEvent }) => {
             });
         }
 
-        case 'customer.subscription.updated': {
-            const subscription = await stripe.subscriptions.retrieve(
-                session.subscription as string
-            );
-            await prisma.orgSubscription.delete({
-                where: {
-                    stripeSubscriptionId: subscription.id,
-                },
-            })
-        }
+        // case 'customer.subscription.updated': {
+        //     const subscription = await stripe.subscriptions.retrieve(
+        //         session.subscription as string
+        //     );
+        //     await prisma.orgSubscription.delete({
+        //         where: {
+        //             stripeSubscriptionId: subscription.id,
+        //         },
+        //     })
+        // }
 
     }
 
