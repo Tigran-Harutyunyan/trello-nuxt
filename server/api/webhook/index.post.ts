@@ -76,8 +76,6 @@ export default defineStripeWebhook(async ({ event, stripeEvent }) => {
         }
 
         case 'customer.subscription.updated': {
-            console.log(stripeEvent);
-
             const object = stripeEvent?.data?.object;
 
             if (object?.canceled_at && object?.id) {
@@ -87,7 +85,6 @@ export default defineStripeWebhook(async ({ event, stripeEvent }) => {
                     },
                 })
             }
-
         }
 
     }
