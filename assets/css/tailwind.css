@@ -123,3 +123,7 @@ body > div:first-of-type {
 .activity-list {
   height: calc(100vh - 257px);
 }
+
+.cl-avatarBox {
+  background: transparent !important;
+}
