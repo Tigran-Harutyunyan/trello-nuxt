@@ -1,6 +1,6 @@
 # Trello application with Nuxt3, Vue, Prisma, Stripe, Tailwind, MySQL
 
-https://trello-tigran.vercel.app/
+Demo - [Trello with nuxt3](https://trello-tigran.vercel.app/)
 
 Key Features:
 
@@ -23,7 +23,3 @@ Key Features:
 - shadcnUI & TailwindCSS
 
 !!! use Stripe test card number("4242 4242 4242 4242") to buy a test subscription.
-
-![alt text](https://ibb.co/RztBWP1)
-![alt text](https://ibb.co/fX0yXFZ)
-![alt text](https://ibb.co/486ScRJ)
