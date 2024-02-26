@@ -1,6 +1,10 @@
 # Trello application with Nuxt3, Vue, Prisma, Stripe, Tailwind, MySQL
 
-Demo - [Trello with nuxt3](https://trello-tigran.vercel.app/)
+[Live Demo](https://trello-tigran.vercel.app)
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/1.png">
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/2.png">
 
 Key Features:
 
