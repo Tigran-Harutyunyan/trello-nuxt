@@ -1,4 +1,4 @@
-import prisma from "../../../libs/prismadb";
+import prisma from "@/libs/prismadb";
 import { MAX_FREE_BOARDS } from "@/constants/boards";
 
 export default defineEventHandler(async (event) => {

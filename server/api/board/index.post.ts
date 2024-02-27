@@ -1,4 +1,4 @@
-import prisma from "../../../libs/prismadb";
+import prisma from "@/libs/prismadb";
 import { incrementAvailableCount, hasAvailableCount } from "@/lib/org-limit";
 import { checkSubscription } from "@/lib/subscription";
 import { createAuditLog } from "@/lib/create-audit-log";

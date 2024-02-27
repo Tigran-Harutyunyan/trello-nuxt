@@ -1,4 +1,4 @@
-import prisma from "../../../libs/prismadb";
+import prisma from "@/libs/prismadb";
 import Stripe from "stripe";
 
 const STRIPE_API_KEY = useRuntimeConfig().stripeKey as string;

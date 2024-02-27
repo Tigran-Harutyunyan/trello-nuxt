@@ -1,4 +1,4 @@
-import prisma from "../../../../../libs/prismadb";
+import prisma from "@/libs/prismadb";
 import { ENTITY_TYPE } from "@prisma/client";
 export default defineEventHandler(async (event) => {
 

@@ -1,4 +1,4 @@
-import prisma from "../../../libs/prismadb";
+import prisma from "@/libs/prismadb";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@prisma/client";
 import { clerkClient } from 'h3-clerk';
