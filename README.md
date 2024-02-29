@@ -2,12 +2,6 @@
 
 [Live Demo](https://trello-tigran.vercel.app)
 
-<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/1.png">
-
-<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/2.png">
-
-<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/3.png">
-
 Key Features:
 
 - Auth
@@ -26,6 +20,24 @@ Key Features:
 - Landing page
 - MySQL DB
 - Prisma ORM
-- shadcnUI & TailwindCSS
+- shadcn UI & TailwindCSS
 
 !!! use Stripe test card number("4242 4242 4242 4242") to buy a test subscription.
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/0.png">
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/1.png">
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/2.png">
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/3.png">
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/4.png">
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/5.png">
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/6.png">
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/7.png">
+
+<img width="1182" alt="Screen Shot 2023-07-10 at 11 27 03 PM" src="/assets/images/8.png">
